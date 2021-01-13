@@ -1,11 +1,15 @@
 class Book < ApplicationRecord
-  validates :title, presence: true
-  validates :publisher_id, presence: true
-  validates :author_id, presence: true
+  validates :title, :publisher_id, :author_id, presence: true
 
   has_many(:book_formats, {
     foreign_key: :book_id,
     class_name: :BookFormat,
+    dependent: :destroy
+  })
+
+  has_many(:ratings, {
+    foreign_key: :book_id,
+    class_name: :BookReview,
     dependent: :destroy
   })
 
@@ -15,19 +19,16 @@ class Book < ApplicationRecord
   })
 
   def book_format_types
-    collection = []
-    self.book_formats.each do |format|
-      type = BookFormatType.find(format.book_format_type_id)
-      collection.push(type)
+    return book_formats.map do |format|
+      BookFormatType.find(format.book_format_type_id)
     end
-    collection
   end
 
   def author_name
-    return "#{self.author.last_name}, #{self.author.first_name}"
+    return "#{author.last_name}, #{author.first_name}"
   end
 
   def average_rating
-
+    ratings.reduce(0) { |acc, rtg| acc + rtg.rating } / ratings.length
   end
 end
