@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_13_023300) do
+ActiveRecord::Schema.define(version: 2021_01_13_024143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,22 +34,23 @@ ActiveRecord::Schema.define(version: 2021_01_13_023300) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "book_reviews", force: :cascade do |t|
+    t.integer "book_id", null: false
+    t.integer "rating", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "books", force: :cascade do |t|
     t.integer "publisher_id", null: false
     t.integer "author_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
   end
 
   create_table "publishers", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "ratings", force: :cascade do |t|
-    t.integer "book_id", null: false
-    t.integer "rating", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
